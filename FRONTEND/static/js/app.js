@@ -16,7 +16,6 @@ if (form) {
 
         try {
 
-            // Loading state
             const submitBtn = form.querySelector("button");
             submitBtn.disabled = true;
             submitBtn.innerText = "Predicting...";
@@ -39,44 +38,23 @@ if (form) {
                 return;
             }
 
-            // Show Result Section
             document.getElementById("resultSection").style.display = "block";
 
-            // Summary
-            document.getElementById("total").innerText =
-                result.summary.total;
+            document.getElementById("total").innerText = result.summary.total;
+            document.getElementById("fraud").innerText = result.summary.fraud;
+            document.getElementById("genuine").innerText = result.summary.genuine;
 
-            document.getElementById("fraud").innerText =
-                result.summary.fraud;
+            document.getElementById("accuracy").innerText = result.summary.accuracy;
+            document.getElementById("precision").innerText = result.summary.precision;
+            document.getElementById("recall").innerText = result.summary.recall;
+            document.getElementById("f1").innerText = result.summary.f1;
 
-            document.getElementById("genuine").innerText =
-                result.summary.genuine;
+            document.getElementById("chartContainer").innerHTML = result.chart;
+            document.getElementById("tableContainer").innerHTML = result.table;
 
-            document.getElementById("accuracy").innerText =
-                result.summary.accuracy;
-
-            document.getElementById("precision").innerText =
-                result.summary.precision;
-
-            document.getElementById("recall").innerText =
-                result.summary.recall;
-
-            document.getElementById("f1").innerText =
-                result.summary.f1;
-
-            // Chart
-            document.getElementById("chartContainer").innerHTML =
-                result.chart;
-
-            // Table
-            document.getElementById("tableContainer").innerHTML =
-                result.table;
-
-            // Download Button
             document.getElementById("downloadBtn").href =
                 "https://project-pbel-3-0.onrender.com/download";
 
-            // Scroll to results
             document.getElementById("resultSection").scrollIntoView({
                 behavior: "smooth"
             });
@@ -84,7 +62,6 @@ if (form) {
         } catch (error) {
 
             console.error(error);
-
             alert("Unable to connect to the server.");
 
             const submitBtn = form.querySelector("button");

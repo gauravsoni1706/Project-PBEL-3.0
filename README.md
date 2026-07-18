@@ -1,26 +1,29 @@
-# 💳 AI-Powered Financial Fraud Detection System
+# 🛡️ AI-Powered Financial Fraud Detection System
 
-An intelligent web application that detects fraudulent financial transactions using Machine Learning. Users can upload transaction datasets in CSV format, and the system predicts fraudulent transactions with high accuracy.
-
----
-
-## 📌 Project Overview
-
-Financial fraud is a major challenge in digital payments. This project uses a trained Machine Learning model to identify suspicious transactions and help prevent financial losses.
-
-The application provides a simple web interface where users can upload a CSV dataset and instantly receive fraud prediction results.
+An AI-powered web application that detects fraudulent credit card transactions using Machine Learning. Users can upload a CSV file containing transaction data, and the system predicts whether each transaction is legitimate or fraudulent.
 
 ---
 
-## 🚀 Features
+## 🌐 Live Demo
 
-- Upload transaction dataset (.csv)
-- Detect fraudulent transactions using Machine Learning
-- Random Forest Classification Model
-- Fast prediction
-- User-friendly Flask Web Interface
-- Download prediction results
-- High Accuracy Fraud Detection
+**Frontend (Netlify)**  
+https://ai-fraud-detectionn.netlify.app
+
+**Backend API (Render)**  
+https://project-pbel-3-0.onrender.com
+
+---
+
+## 📌 Features
+
+- 🔍 Detects fraudulent credit card transactions
+- 📂 Upload CSV datasets
+- 🤖 Machine Learning prediction using Random Forest
+- 📊 Interactive dashboard with prediction summary
+- 📈 Pie chart visualization
+- 📋 Preview of prediction results
+- 📥 Download prediction results as CSV
+- 🌐 Fully deployed online using Netlify & Render
 
 ---
 
@@ -29,18 +32,28 @@ The application provides a simple web interface where users can upload a CSV dat
 ### Frontend
 - HTML5
 - CSS3
-- Bootstrap
+- Bootstrap 5
 - JavaScript
 
 ### Backend
 - Python
 - Flask
+- Flask-CORS
+- Gunicorn
 
 ### Machine Learning
-- Scikit-Learn
+- Scikit-learn
+- Random Forest Classifier
 - Pandas
 - NumPy
 - Joblib
+
+### Visualization
+- Plotly
+
+### Deployment
+- Netlify (Frontend)
+- Render (Backend)
 
 ---
 
@@ -49,22 +62,30 @@ The application provides a simple web interface where users can upload a CSV dat
 ```
 AI-Fraud-Detection/
 │
-├── app.py
-├── train_model.py
-├── requirements.txt
-├── README.md
-├── models/
+├── BACKEND/
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── Procfile
+│   ├── models/
+│   │   ├── fraud_model.pkl
+│   │   └── scaler.pkl
+│   └── utils/
+│
+├── FRONTEND/
+│   ├── index.html
+│   ├── predict.html
+│   └── static/
+│       ├── css/
+│       └── js/
+│
 ├── dataset/
-├── static/
-├── templates/
-├── notebooks/
-├── utils/
-└── test_transactions.csv
+│
+└── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+## 🚀 Installation
 
 Clone the repository
 
@@ -72,21 +93,21 @@ Clone the repository
 git clone https://github.com/gauravsoni1706/Project-PBEL-3.0.git
 ```
 
-Go inside the project
+Go to project directory
 
 ```bash
 cd Project-PBEL-3.0
 ```
 
-Create Virtual Environment
+Create virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate Virtual Environment
+Activate virtual environment
 
-Windows
+### Windows
 
 ```bash
 venv\Scripts\activate
@@ -95,70 +116,89 @@ venv\Scripts\activate
 Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install -r BACKEND/requirements.txt
 ```
 
-Run the application
+Run Backend
 
 ```bash
+cd BACKEND
 python app.py
+```
+
+Run Frontend
+
+```bash
+cd FRONTEND
+python -m http.server 5500
 ```
 
 Open
 
 ```
-http://127.0.0.1:5000
+http://127.0.0.1:5500
 ```
 
 ---
 
-## 📊 Machine Learning Model
+## 📊 Model Performance
 
-Algorithm Used:
-
-- Random Forest Classifier
-
-Libraries Used:
-
-- Scikit-Learn
-- Pandas
-- NumPy
-- Joblib
+| Metric | Value |
+|---------|-------|
+| Accuracy | 99.95% |
+| Precision | 97.18% |
+| Recall | 72.63% |
+| F1 Score | 83.13% |
 
 ---
 
-## 📷 Screenshots
+## 📷 Application Workflow
 
-### Home Page
-
-(Add Screenshot Here)
-
-### Upload Dataset
-
-(Add Screenshot Here)
-
-### Prediction Result
-
-(Add Screenshot Here)
+1. Open the website.
+2. Navigate to the Prediction page.
+3. Upload a CSV dataset.
+4. Click **Predict Fraud**.
+5. View:
+   - Total Transactions
+   - Fraudulent Transactions
+   - Legitimate Transactions
+   - Accuracy
+   - Precision
+   - Recall
+   - F1 Score
+   - Prediction Chart
+   - Prediction Table
+6. Download the prediction results.
 
 ---
 
-## 📁 Dataset
+## 📸 Screenshots
 
-The project uses transaction datasets for fraud detection.
+Add screenshots of:
 
-For testing, use:
+- Home Page
+- Prediction Page
+- Prediction Results
+- Pie Chart
+- Downloaded CSV
 
-```
-test_transactions.csv
+---
 
-## 👨‍💻 Developer
+## 🔮 Future Enhancements
+
+- User Authentication
+- Drag & Drop CSV Upload
+- Deep Learning Models
+- Real-time Fraud Detection
+- REST API Documentation
+- Multiple ML Model Comparison
+- Cloud Database Integration
+
+---
+
+## 👨‍💻 Author
 
 **Gaurav Soni**
-
-B.Tech CSE (Data Science)
-
-ABES Engineering College
 
 GitHub:
 https://github.com/gauravsoni1706
@@ -168,3 +208,9 @@ https://github.com/gauravsoni1706
 ## 📜 License
 
 This project is developed for educational and academic purposes.
+
+---
+
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ on GitHub.

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Fraud Detection Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+
+<div class="container">
+
+<a class="navbar-brand fw-bold" href="/">
+🛡 AI Fraud Detection Dashboard
+</a>
+
+<a href="/" class="btn btn-light">
+🏠 Home
+</a>
+
+</div>
+
+</nav>
+
+<div class="container mt-5">
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<h2 class="text-center mb-4">
+Upload Credit Card Transactions CSV
+</h2>
+
+<!-- CSV Requirements -->
+
+<div class="csv-requirements">
+
+<h5>📄 CSV File Requirements</h5>
+
+<ul>
+
+<li>Upload only <strong>.csv</strong> files.</li>
+
+<li>The CSV must contain exactly <strong>30 columns</strong>.</li>
+
+<li>First row should contain the column names.</li>
+
+<li>Each row should contain one transaction.</li>
+
+<li>Only numerical values are allowed.</li>
+
+<li><strong>Do NOT include the Class column.</strong></li>
+
+</ul>
+
+<div class="csv-columns">
+
+Time,V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12,V13,V14,V15,V16,V17,V18,V19,V20,V21,V22,V23,V24,V25,V26,V27,V28,Amount
+
+</div>
+
+<div class="mt-3">
+
+<a href="/download-sample" class="btn btn-success">
+⬇ Download Sample CSV
+</a>
+
+</div>
+
+</div>
+
+<!-- Error Message -->
+
+{% if error %}
+
+<div class="alert alert-danger mt-3">
+
+{{ error }}
+
+</div>
+
+{% endif %}
+
+<!-- Upload Form -->
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="upload-box">
+
+<input
+type="file"
+name="file"
+class="form-control"
+accept=".csv"
+required>
+
+<div class="form-text mt-2">
+
+Supported Format: CSV only
+
+</div>
+
+</div>
+
+<div class="text-center mt-4">
+
+<button class="btn btn-primary btn-lg">
+
+🔍 Predict Fraud
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+{% if summary %}
+
+<!-- Summary -->
+
+<div class="row mt-5">
+
+<div class="col-md-4">
+
+<div class="card summary-card shadow">
+
+<div class="card-body text-center">
+
+<h2>{{ summary.total }}</h2>
+
+<p>Total Transactions</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card summary-card shadow">
+
+<div class="card-body text-center">
+
+<h2 class="text-danger">
+
+{{ summary.fraud }}
+
+</h2>
+
+<p>Fraud Transactions</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card summary-card shadow">
+
+<div class="card-body text-center">
+
+<h2 class="text-success">
+
+{{ summary.genuine }}
+
+</h2>
+
+<p>Legitimate Transactions</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Model Performance -->
+
+<div class="card shadow mt-4">
+
+<div class="card-body">
+
+<h3 class="mb-4">
+
+📊 Model Performance
+
+</h3>
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<h5>Accuracy</h5>
+
+<h3>{{ summary.accuracy }}</h3>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>Precision</h5>
+
+<h3>{{ summary.precision }}</h3>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>Recall</h5>
+
+<h3>{{ summary.recall }}</h3>
+
+</div>
+
+<div class="col-md-3">
+
+<h5>F1 Score</h5>
+
+<h3>{{ summary.f1 }}</h3>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Chart -->
+
+<div class="card shadow mt-4">
+
+<div class="card-body">
+
+<h3>
+
+📈 Fraud Detection Chart
+
+</h3>
+
+{{ chart|safe }}
+
+</div>
+
+</div>
+
+<!-- Table -->
+
+<div class="card shadow mt-4">
+
+<div class="card-body">
+
+<h3>
+
+📋 First 10 Predictions
+
+</h3>
+
+<div class="table-responsive">
+
+{{ table|safe }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="text-center mt-4 mb-5">
+
+<a href="/download" class="btn btn-success btn-lg">
+
+⬇ Download Prediction CSV
+
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<footer>
+
+AI Powered Financial Fraud Detection System © 2026
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

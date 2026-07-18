@@ -151,23 +151,6 @@ For testing, use:
 
 ```
 test_transactions.csv
-```
-
----
-
-## 🎥 Demo Video
-
-**Demo:** *(Add your video link here after uploading)*
-
-Example:
-
-https://youtu.be/YourVideoLink
-
-or
-
-https://drive.google.com/file/d/YourVideoID/view
-
----
 
 ## 👨‍💻 Developer
 

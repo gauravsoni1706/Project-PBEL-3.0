@@ -3,13 +3,17 @@ import joblib
 import pandas as pd
 import plotly.express as px
 
-from flask import Flask, render_template, request, send_file, send_from_directory
+from flask import Flask, render_template, request, send_file
 
 app = Flask(__name__)
 
-# Load trained model and scaler
-model = joblib.load("models/fraud_model.pkl")
-scaler = joblib.load("models/scaler.pkl")
+# ---------------- LOAD MODEL ---------------- #
+
+MODEL_PATH = os.path.join("models", "fraud_model.pkl")
+SCALER_PATH = os.path.join("models", "scaler.pkl")
+
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
 
 
 # ---------------- HOME PAGE ---------------- #
@@ -41,66 +45,98 @@ def predict():
 
         if uploaded_file and uploaded_file.filename != "":
 
-            # Read uploaded CSV
-            df = pd.read_csv(uploaded_file)
+            try:
 
-            # Remove Class column if user uploads original dataset
-            if "Class" in df.columns:
-                df = df.drop(columns=["Class"])
+                # Read CSV
+                df = pd.read_csv(uploaded_file)
 
-            # Scale Time and Amount
-            df[["Time", "Amount"]] = scaler.transform(
-                df[["Time", "Amount"]]
-            )
+                # Remove target column if present
+                if "Class" in df.columns:
+                    df = df.drop(columns=["Class"])
 
-            # Predict
-            prediction = model.predict(df)
+                # Check required columns
+                required_columns = ["Time", "Amount"]
 
-            # Add prediction column
-            df["Prediction"] = prediction
+                for col in required_columns:
+                    if col not in df.columns:
+                        return render_template(
+                            "predict.html",
+                            summary=None,
+                            chart=None,
+                            table=f"""
+                            <div class='alert alert-danger'>
+                            Missing required column:
+                            <b>{col}</b>
+                            </div>
+                            """
+                        )
 
-            fraud = int((prediction == 1).sum())
-            genuine = int((prediction == 0).sum())
+                # Scale features
+                df[["Time", "Amount"]] = scaler.transform(
+                    df[["Time", "Amount"]]
+                )
 
-            summary = {
-                "total": len(df),
-                "fraud": fraud,
-                "genuine": genuine,
-                "accuracy": "99.95%",
-                "precision": "97.18%",
-                "recall": "72.63%",
-                "f1": "83.13%"
-            }
+                # Predict
+                prediction = model.predict(df)
 
-            # Create Pie Chart
-            fig = px.pie(
-                names=["Fraud", "Legitimate"],
-                values=[fraud, genuine],
-                title="Fraud Detection Summary",
-                color=["Fraud", "Legitimate"],
-                color_discrete_map={
-                    "Fraud": "#dc3545",
-                    "Legitimate": "#198754"
+                # Add prediction column
+                df["Prediction"] = prediction
+
+                fraud = int((prediction == 1).sum())
+                genuine = int((prediction == 0).sum())
+
+                summary = {
+                    "total": len(df),
+                    "fraud": fraud,
+                    "genuine": genuine,
+                    "accuracy": "99.95%",
+                    "precision": "97.18%",
+                    "recall": "72.63%",
+                    "f1": "83.13%"
                 }
-            )
 
-            chart = fig.to_html(full_html=False)
+                # Pie Chart
+                fig = px.pie(
+                    names=["Fraud", "Legitimate"],
+                    values=[fraud, genuine],
+                    title="Fraud Detection Summary",
+                    color=["Fraud", "Legitimate"],
+                    color_discrete_map={
+                        "Fraud": "#dc3545",
+                        "Legitimate": "#198754"
+                    }
+                )
 
-            # Create Preview Table
-            preview = df.copy()
+                chart = fig.to_html(full_html=False)
 
-            preview["Prediction"] = preview["Prediction"].replace({
-                0: "Legitimate",
-                1: "Fraud"
-            })
+                # Preview Table
+                preview = df.copy()
 
-            table = preview.head(10).to_html(
-                classes="table table-striped table-hover table-bordered",
-                index=False
-            )
+                preview["Prediction"] = preview["Prediction"].replace({
+                    0: "Legitimate",
+                    1: "Fraud"
+                })
 
-            # Save prediction CSV
-            df.to_csv("prediction_result.csv", index=False)
+                table = preview.head(10).to_html(
+                    classes="table table-striped table-hover table-bordered",
+                    index=False
+                )
+
+                # Save CSV
+                df.to_csv("prediction_result.csv", index=False)
+
+            except Exception as e:
+
+                return render_template(
+                    "predict.html",
+                    summary=None,
+                    chart=None,
+                    table=f"""
+                    <div class='alert alert-danger'>
+                    <b>Error:</b><br>{str(e)}
+                    </div>
+                    """
+                )
 
     return render_template(
         "predict.html",
@@ -115,9 +151,11 @@ def predict():
 @app.route("/download")
 def download():
 
-    if os.path.exists("prediction_result.csv"):
+    filename = "prediction_result.csv"
+
+    if os.path.exists(filename):
         return send_file(
-            "prediction_result.csv",
+            filename,
             as_attachment=True
         )
 
@@ -127,4 +165,5 @@ def download():
 # ---------------- RUN APP ---------------- #
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
